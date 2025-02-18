@@ -774,4 +774,4 @@ curl -X POST http://localhost:3002/api/orders \
 
 3. **Surveillance des Pipelines** :
 
-   - Utilisez l'interface GitLab pour surveiller l'exécution des pipelines, vérifier les rapports de sécurité et consulter les résultats des tests.
+   - Utilisez l'interface GitLab pour surveiller l'exécution des pipelines, vérifier les rapports de sécurité et consulter les résultats des tests.# e-commerce-vue
