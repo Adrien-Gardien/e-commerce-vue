@@ -1,0 +1,78 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend/Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - auth-service
+      - product-service
+      - order-service
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: docker/backend/Dockerfile
+      args:
+        SERVICE_NAME: auth-service
+    ports:
+      - "3001:3000"
+    depends_on:
+      - auth-db
+    environment:
+      MONGO_URI: "mongodb://auth-db:27017/auth"
+
+  product-service:
+    build:
+      context: .
+      dockerfile: docker/backend/Dockerfile
+      args:
+        SERVICE_NAME: product-service
+    ports:
+      - "3002:3000"
+    depends_on:
+      - product-db
+    environment:
+      MONGO_URI: "mongodb://product-db:27017/products"
+
+  order-service:
+    build:
+      context: .
+      dockerfile: docker/backend/Dockerfile
+      args:
+        SERVICE_NAME: order-service
+    ports:
+      - "3003:3000"
+    depends_on:
+      - order-db
+    environment:
+      MONGO_URI: "mongodb://order-db:27017/orders"
+
+  auth-db:
+    image: mongo:4.4
+    ports:
+      - "27017:27017"
+    volumes:
+      - auth-data:/data/db
+
+  product-db:
+    image: mongo:4.4
+    ports:
+      - "27018:27017"
+    volumes:
+      - product-data:/data/db
+
+  order-db:
+    image: mongo:4.4
+    ports:
+      - "27019:27017"
+    volumes:
+      - order-data:/data/db
+
+volumes:
+  auth-data:
+  product-data:
+  order-data:
