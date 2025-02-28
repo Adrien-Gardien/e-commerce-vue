@@ -1,0 +1,31 @@
+name: Docker Build CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Lint Dockerfiles
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: "./*/Dockerfile"
+
+      - name: Build Frontend Image
+        run: docker build -t e-commerce-frontend ./frontend
+
+      - name: Build Product Service
+        run: docker build -t product-service ./product-service
+
+      - name: Build Auth Service
+        run: docker build -t auth-service ./auth-service
+
+      - name: Build Order Service
+        run: docker build -t order-service ./order-service
