@@ -2,7 +2,7 @@
 
 # Attendre que le service product soit disponible
 echo "Attente du service product..."
-sleep 10
+sleep 1
 
 # URL du service
 API_URL="http://localhost:3000/api"
