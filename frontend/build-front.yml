@@ -1,0 +1,43 @@
+image: debian:12
+stages:
+  - install
+  - test
+  - build
+
+variables:
+  NODE_ENV: "production"
+
+before_script:
+  - apt-get update && apt-get install -y nodejs npm
+
+install:
+  stage: install
+  script:
+    - npm install
+    - echo "Vérification du fichier vite.config.js après l'installation..."
+    - ls -al vite.config.js || { echo "vite.config.js est manquant !" && exit 1; }
+  artifacts:
+    paths:
+      - node_modules/
+
+test:
+  stage: test
+  script:
+    - echo "Exécution des tests unitaires..."
+    - npm run test
+  artifacts:
+    paths:
+      - test-results/
+
+build:
+  stage: build
+  script:
+    - echo "Vérification des fichiers avant le build..."
+    - ls -al
+    - echo "Vérification de vite.config.js :"
+    - cat vite.config.js || { echo "vite.config.js est manquant !" && exit 1; }
+    - echo "Démarrage du build avec npm run build..."
+    - npm run build
+  artifacts:
+    paths:
+      - dist/

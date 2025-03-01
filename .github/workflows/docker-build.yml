@@ -2,9 +2,7 @@ name: Docker Build CI
 
 on:
   push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
+    branches: ["develop", "feature/cicd"]
 
 jobs:
   build:
@@ -13,19 +11,26 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Lint Dockerfiles
-        uses: hadolint/hadolint-action@v3.1.0
-        with:
-          dockerfile: "./*/Dockerfile"
+  build_frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Frontend
+        run: ./frontend/build-front.yml
 
-      - name: Build Frontend Image
-        run: docker build -t e-commerce-frontend ./frontend
-
-      - name: Build Product Service
-        run: docker build -t product-service ./product-service
-
+  build_auth:
+    runs-on: ubuntu-latest
+    steps:
       - name: Build Auth Service
-        run: docker build -t auth-service ./auth-service
+        run: ./services/auth-service/build-auth.yml
 
+  build_product:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Product Service
+        run: ./services/product-service/build-product.yml
+
+  build_order:
+    runs-on: ubuntu-latest
+    steps:
       - name: Build Order Service
-        run: docker build -t order-service ./order-service
+        run: ./services/order-service/build-order.yml

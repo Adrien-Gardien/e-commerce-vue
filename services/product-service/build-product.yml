@@ -1,0 +1,30 @@
+image: debian:12
+stages:
+  - install
+  - test
+  - build
+
+before_script:
+  - apt-get update && apt-get install -y nodejs npm docker.io
+
+install:
+  stage: install
+  script:
+    - npm install
+  artifacts:
+    paths:
+      - node_modules/
+
+test:
+  stage: test
+  script:
+    - npm test
+  artifacts:
+    paths:
+      - test-results/
+
+build:
+  stage: build
+  script:
+    - docker build -t $CI_REGISTRY_NAME/product-service:$IMAGE_TAG .
+    - docker push $CI_REGISTRY_NAME/product-service:$IMAGE_TAG
