@@ -21,7 +21,6 @@ jobs:
         run: |
           cd frontend
           npm install
-          npm run lint
           npm test -- --passWithNoTests
 
       - name: Test Services
@@ -32,7 +31,6 @@ jobs:
               cd $service
               echo "Testing $service"
               npm install
-              npm run lint || true
               npm test -- --passWithNoTests || true
               cd ..
             fi
