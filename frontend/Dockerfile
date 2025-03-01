@@ -1,4 +1,4 @@
-# Étape 1 : Base commune
+# Étape 1 : BASe commune
 FROM node:18.19.0-alpine AS base
 WORKDIR /app
 
@@ -38,7 +38,7 @@ EXPOSE 8080
 # Commande pour démarrer l'application
 CMD ["npm", "start"]
 
-FROM node:18-alpine as development
+FROM node:18-alpine AS development
 
 WORKDIR /app
 
