@@ -13,6 +13,9 @@ COPY . .
 FROM base AS build-production
 ENV NODE_ENV=production
 
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
 # Debug : Vérifiez que vite.config.js est présent
 RUN ls -al vite.config.js || { echo "vite.config.js est manquant !" && exit 1; }
 
@@ -37,17 +40,3 @@ EXPOSE 8080
 
 # Commande pour démarrer l'application
 CMD ["npm", "start"]
-
-FROM node:18-alpine AS development
-
-WORKDIR /app
-
-COPY package*.json ./
-
-RUN npm install
-
-COPY . .
-
-EXPOSE 8080
-
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
