@@ -22,7 +22,6 @@ start-swarm:
 	make pm2-stop
 	make stop-swarm
 	docker swarm init --advertise-addr 127.0.0.1; \
-	make secrets
 
 pm2:
 	pm2 start ecosystem.config.cjs
@@ -44,9 +43,3 @@ hub:
 	docker push kaliwarsteen/ecommerceproductservice:latest
 	docker build -t kaliwarsteen/ecommerceorderservice:latest ./services/order-service
 	docker push kaliwarsteen/ecommerceorderservice:latest
-
-secrets:
-	if docker secret ls | grep -q "env_production"; then \
-		docker secret rm env_production; \
-	fi
-	docker secret create env_production .env.production

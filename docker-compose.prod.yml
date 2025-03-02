@@ -5,48 +5,58 @@ services:
     image: ${CI_REGISTRY_NAME}/ecommercevuefrontend:${IMAGE_TAG}
     ports:
       - "8080:8080"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - VITE_PRODUCT_SERVICE_URL=${VITE_PRODUCT_SERVICE_URL}
+      - VITE_AUTH_SERVICE_URL=${VITE_AUTH_SERVICE_URL}
+      - VITE_ORDER_SERVICE_URL=${VITE_ORDER_SERVICE_URL}
     depends_on:
       - product-service
       - auth-service
       - order-service
     networks:
       - e-commerce-network
-    secrets:
-      - env_production
 
   product-service:
     image: ${CI_REGISTRY_NAME}/ecommerceproductservice:${IMAGE_TAG}
     ports:
       - "3000:3000"
+    environment:
+      - MONGODB_URI=mongodb://mongodb-products:27017/ecommerce
+      - NODE_ENV=${NODE_ENV}
+      - JWT_SECRET=${JWT_SECRET}
     depends_on:
       - mongodb-products
     networks:
       - e-commerce-network
-    secrets:
-      - env_production
 
   auth-service:
     image: ${CI_REGISTRY_NAME}/ecommerceauthservice:${IMAGE_TAG}
     ports:
       - "3001:3001"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - MONGODB_URI=mongodb://mongodb-auth:27017/auth
+      - JWT_SECRET=${JWT_SECRET}
     depends_on:
       - mongodb-auth
     networks:
       - e-commerce-network
-    secrets:
-      - env_production
 
   order-service:
     image: ${CI_REGISTRY_NAME}/ecommerceorderservice:${IMAGE_TAG}
     ports:
       - "3002:3002"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - MONGODB_URI=mongodb://mongodb-orders:27017/orders
+      - JWT_SECRET=${JWT_SECRET}
+      - VITE_PRODUCT_SERVICE_URL=${VITE_PRODUCT_SERVICE_URL}
     depends_on:
       - mongodb-orders
       - product-service
     networks:
       - e-commerce-network
-    secrets:
-      - env_production
 
   mongodb-auth:
     image: mongo:4.4
@@ -89,7 +99,3 @@ volumes:
 networks:
   e-commerce-network:
     driver: overlay
-
-secrets:
-  env_production:
-    external: true
