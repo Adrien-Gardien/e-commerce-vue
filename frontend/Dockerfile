@@ -13,9 +13,6 @@ COPY . .
 FROM base AS build-production
 ENV NODE_ENV=production
 
-COPY entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
-
 # Debug : Vérifiez que vite.config.js est présent
 RUN ls -al vite.config.js || { echo "vite.config.js est manquant !" && exit 1; }
 
