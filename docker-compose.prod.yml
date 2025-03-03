@@ -16,11 +16,9 @@ services:
       - order-service
     networks:
       - e-commerce-network
-    env_file:
-      - .env.production
 
   product-service:
-    image: ${CI_REGISTRY_NAME}/ecommervueproduct-service:${IMAGE_TAG}
+    image: ${CI_REGISTRY_NAME}/ecommerceproductservice:${IMAGE_TAG}
     ports:
       - "3000:3000"
     environment:
@@ -31,11 +29,9 @@ services:
       - mongodb-products
     networks:
       - e-commerce-network
-    env_file:
-      - .env.production
 
   auth-service:
-    image: ${CI_REGISTRY_NAME}/ecommervueauth-service:${IMAGE_TAG}
+    image: ${CI_REGISTRY_NAME}/ecommerceauthservice:${IMAGE_TAG}
     ports:
       - "3001:3001"
     environment:
@@ -46,11 +42,9 @@ services:
       - mongodb-auth
     networks:
       - e-commerce-network
-    env_file:
-      - .env.production
 
   order-service:
-    image: ${CI_REGISTRY_NAME}/ecommervueorder-service:${IMAGE_TAG}
+    image: ${CI_REGISTRY_NAME}/ecommerceorderservice:${IMAGE_TAG}
     ports:
       - "3002:3002"
     environment:
@@ -63,8 +57,6 @@ services:
       - product-service
     networks:
       - e-commerce-network
-    env_file:
-      - .env.production
 
   mongodb-auth:
     image: mongo:4.4
